@@ -1,0 +1,29 @@
+{
+  "name": "vite-e2e-cypress",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "A simple script to run cypress e2e test with vite as dev server",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "bin": {
+    "vite-cy-e2e": "./index.js"
+  },
+  "keywords": [
+    "vite",
+    "cypress",
+    "e2e"
+  ],
+  "author": "roackb2@gmail.com",
+  "license": "ISC",
+  "dependencies": {
+    "commander": "^9.2.0",
+    "execa": "^6.1.0",
+    "lodash": "^4.17.21"
+  },
+  "peerDependencies": {
+    "vite": "^2.0.0",
+    "cypress": "^9.0.0"
+  }
+}
