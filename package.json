@@ -1,6 +1,6 @@
 {
   "name": "vite-e2e-cypress",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "type": "module",
   "description": "A simple script to run cypress e2e test with vite as dev server",
   "main": "index.js",
@@ -20,7 +20,8 @@
   "dependencies": {
     "commander": "^9.2.0",
     "execa": "^6.1.0",
-    "lodash": "^4.17.21"
+    "lodash": "^4.17.21",
+    "vite": "^2.0.0"
   },
   "peerDependencies": {
     "vite": "^2.0.0",

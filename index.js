@@ -3,8 +3,8 @@ import { createRequire } from "module";
 import path from 'path'
 import { execa } from 'execa'
 import { program } from 'commander'
-import vite  from 'vite'
-const { createServer } = vite
+import vite from 'vite'
+const { build, preview } = vite
 
 program
   .name('vite-e2e-cypress')
@@ -36,14 +36,21 @@ const resolveModule = function (request, context) {
   const cwd = process.cwd()
   const root = options.root ? path.resolve(cwd, options.root) : cwd
   const configFile = path.resolve(cwd, options.configFile || 'vite.config.ts')
-  const port = options.port || 1337
-  const server = await createServer({
+  const port = options.port || 8080
+  const configs = {
     root,
     configFile,
-    mode: options.mode || 'production',
-    server: { port }
+    mode: options.mode || 'production'
+  }
+  await build(configs)
+
+  const server = await preview({
+    ...configs,
+    preview: {
+      port,
+      open: false
+    }
   })
-  await server.listen()
 
   server.printUrls()
 
