@@ -1,6 +1,6 @@
 {
   "name": "vite-e2e-cypress",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "type": "module",
   "description": "A simple script to run cypress e2e test with vite as dev server",
   "main": "index.js",

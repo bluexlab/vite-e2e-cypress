@@ -44,7 +44,7 @@ const resolveModule = function (request, context) {
   }
   await build(configs)
 
-  const server = await preview({
+  const previewServer = await preview({
     ...configs,
     preview: {
       port,
@@ -52,7 +52,7 @@ const resolveModule = function (request, context) {
     }
   })
 
-  server.printUrls()
+  previewServer.printUrls()
 
   let cyArgs = [
     options.headless ? 'run' : 'open', // open or run
@@ -66,13 +66,13 @@ const resolveModule = function (request, context) {
   const cypressBinPath = resolveModule('cypress/bin/cypress', cwd) ||
     resolveModule('cypress/bin/cypress', __dirname)
   const runner = execa(cypressBinPath, cyArgs, { stdio: 'inherit' })
-  if (server) {
-    runner.on('exit', () => server.close())
-    runner.on('error', () => server.close())
-  }
-
-  if (process.env.VUE_CLI_TEST) {
+  if (previewServer) {
+    runner.on('error', () => {
+      previewServer.httpServer.close()
+      process.exit(1)
+    })
     runner.on('exit', code => {
+      previewServer.httpServer.close()
       process.exit(code)
     })
   }
