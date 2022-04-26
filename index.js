@@ -4,7 +4,7 @@ import path from 'path'
 import { execa } from 'execa'
 import { program } from 'commander'
 import vite from 'vite'
-const { build, preview } = vite
+const { build, preview, createServer } = vite
 
 program
   .name('vite-e2e-cypress')
@@ -13,7 +13,7 @@ program
   .option('-p, --port <port>', 'port to serve the vite server')
   .option('-c, --config-file <configFile>', 'path to vite config file')
   .option('--headless', 'run in headless mode without GUI')
-  .option('--mode', 'specify the mode the dev server should run in.', 'production')
+  .option('-m, --mode <mode>', 'specify the mode the dev server should run in.', 'production')
   .option('-s, --spec <spec>', '(headless only) runs a specific spec file. defaults to "all"', 'all') 
 
 program.parse()
@@ -37,22 +37,42 @@ const resolveModule = function (request, context) {
   const root = options.root ? path.resolve(cwd, options.root) : cwd
   const configFile = path.resolve(cwd, options.configFile || 'vite.config.ts')
   const port = options.port || 8080
+  const mode = options.mode || 'production'
   const configs = {
     root,
     configFile,
-    mode: options.mode || 'production'
+    mode
   }
-  await build(configs)
 
-  const previewServer = await preview({
-    ...configs,
-    preview: {
-      port,
-      open: false
-    }
-  })
+  let server = null
+  let previewServer = null
 
-  previewServer.printUrls()
+  if (options.mode === 'development') {
+    server = await createServer({
+      ...configs,
+      server: {
+        port
+      }
+    })
+    await server.listen()
+
+    server.printUrls()
+  } else {
+    await build(configs)
+    previewServer = await preview({
+      ...configs,
+      preview: {
+        port,
+        open: false
+      }
+    })
+    previewServer.printUrls()
+  }
+
+  const closeServer = () => {
+    if (server) server.close()
+    if (previewServer) previewServer.httpServer.close()
+  }
 
   let cyArgs = [
     options.headless ? 'run' : 'open', // open or run
@@ -68,11 +88,11 @@ const resolveModule = function (request, context) {
   const runner = execa(cypressBinPath, cyArgs, { stdio: 'inherit' })
   if (previewServer) {
     runner.on('error', () => {
-      previewServer.httpServer.close()
+      closeServer()
       process.exit(1)
     })
     runner.on('exit', code => {
-      previewServer.httpServer.close()
+      closeServer()
       process.exit(code)
     })
   }
