@@ -42,6 +42,8 @@ Run in different mode (default to production)
 vite-cy-e2e -m development
 ```
 
-> NOTE: When running in production mode, vite-e2e-cypress will build the project and use preview server.
-> When running in development mode, vite-e2e-cypress will run the dev server
-> to reflect code change without the need to restart cypress.
+Run dev server instead of build the app and run preview server.
+Might be helpful for local development to reflect code change immediately without restarting the whole process.
+```shell
+vite-cy-e2e -d
+```

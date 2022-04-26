@@ -13,7 +13,9 @@ program
   .option('-p, --port <port>', 'port to serve the vite server')
   .option('-c, --config-file <configFile>', 'path to vite config file')
   .option('--headless', 'run in headless mode without GUI')
+  .option('-d, --dev', 'run dev server instead of using build & preview')
   .option('-m, --mode <mode>', 'specify the mode the dev server should run in.', 'production')
+  .option('-d, --serve-mode <serveMode>', 'specify the mode the dev server should run in.', 'production')
   .option('-s, --spec <spec>', '(headless only) runs a specific spec file. defaults to "all"', 'all') 
 
 program.parse()
@@ -47,7 +49,7 @@ const resolveModule = function (request, context) {
   let server = null
   let previewServer = null
 
-  if (options.mode === 'development') {
+  if (options.dev) {
     server = await createServer({
       ...configs,
       server: {
