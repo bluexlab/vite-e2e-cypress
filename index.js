@@ -88,7 +88,7 @@ const resolveModule = function (request, context) {
   const cypressBinPath = resolveModule('cypress/bin/cypress', cwd) ||
     resolveModule('cypress/bin/cypress', __dirname)
   const runner = execa(cypressBinPath, cyArgs, { stdio: 'inherit' })
-  if (previewServer) {
+  if (server || previewServer) {
     runner.on('error', () => {
       closeServer()
       process.exit(1)

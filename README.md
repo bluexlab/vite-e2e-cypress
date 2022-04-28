@@ -43,7 +43,7 @@ vite-cy-e2e -m development
 ```
 
 Run dev server instead of build the app and run preview server.
-Might be helpful for local development to reflect code change immediately without restarting the whole process.
+Might be helpful for local development to reflect code change immediately without restarting cypress.
 ```shell
 vite-cy-e2e -d
 ```
