@@ -15,7 +15,6 @@ program
   .option('--headless', 'run in headless mode without GUI')
   .option('-d, --dev', 'run dev server instead of using build & preview')
   .option('-m, --mode <mode>', 'specify the mode the dev server should run in.', 'production')
-  .option('-d, --serve-mode <serveMode>', 'specify the mode the dev server should run in.', 'production')
   .option('-s, --spec <spec>', '(headless only) runs a specific spec file. defaults to "all"', 'all') 
 
 program.parse()
