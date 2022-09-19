@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-import { createRequire } from "module";
+import { createRequire } from 'module'
 import path from 'path'
 import { execa } from 'execa'
 import { program } from 'commander'
@@ -24,12 +24,10 @@ const options = program.opts()
 const resolveModule = function (request, context) {
   let resolvedPath
   try {
-    try {
-      resolvedPath = createRequire(path.resolve(context, 'package.json')).resolve(request)
-    } catch (e) {
-      resolvedPath = resolve(request, { paths: [context] })
-    }
-  } catch (e) {}
+    resolvedPath = createRequire(path.resolve(context, 'package.json')).resolve(request)
+  } catch (e) {
+    console.warn(e)
+  }
   return resolvedPath
 }
 
@@ -84,8 +82,8 @@ const resolveModule = function (request, context) {
   }
 
   // Use loadModule to allow users to customize their Cypress dependency version.
-  const cypressBinPath = resolveModule('cypress/bin/cypress', cwd) ||
-    resolveModule('cypress/bin/cypress', __dirname)
+  const cypressModulePath = resolveModule('cypress', cwd)
+  const cypressBinPath = path.resolve(cypressModulePath, '../bin/cypress')
   const runner = execa(cypressBinPath, cyArgs, { stdio: 'inherit' })
   if (server || previewServer) {
     runner.on('error', () => {
