@@ -15,7 +15,9 @@ program
   .option('--headless', 'run in headless mode without GUI')
   .option('-d, --dev', 'run dev server instead of using build & preview')
   .option('-m, --mode <mode>', 'specify the mode the dev server should run in.', 'production')
-  .option('-s, --spec <spec>', '(headless only) runs a specific spec file. defaults to "all"', 'all') 
+  .option('-s, --spec <spec>', '(headless only) runs a specific spec file.', 'all') 
+  .option('-e, --e2e', 'run end to end tests' )
+  .option('-b, --browser <browser>', 'specify browser to run', 'chrome')
 
 program.parse()
 
@@ -73,12 +75,17 @@ const resolveModule = function (request, context) {
     if (previewServer) previewServer.httpServer.close()
   }
 
+  
   let cyArgs = [
     options.headless ? 'run' : 'open', // open or run
-    '--config', `baseUrl=http://localhost:${port}`
+    '--config', `baseUrl=http://localhost:${port}`,
+    options.e2e ? '--e2e' : ''
   ]
   if (options.headless) {
     cyArgs = cyArgs.concat(['--spec', options.spec])
+  }
+  if (options.browser) {
+    cyArgs = cyArgs.concat(['--browser', options.browser])
   }
 
   // Use loadModule to allow users to customize their Cypress dependency version.
