@@ -3,8 +3,7 @@ import { createRequire } from 'module'
 import path from 'path'
 import { execa } from 'execa'
 import { program } from 'commander'
-import vite from 'vite'
-const { build, preview, createServer } = vite
+import { build, preview, createServer } from 'vite'
 
 program
   .name('vite-e2e-cypress')
