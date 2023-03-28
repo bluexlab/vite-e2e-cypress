@@ -77,7 +77,7 @@ const resolveModule = function (request, context) {
   
   let cyArgs = [
     options.headless ? 'run' : 'open', // open or run
-    '--config', `baseUrl=http://localhost:${port}`,
+    '--config', `baseUrl=${ configFile?.server?.https ? 'https' : 'http'}://localhost:${port}`,
     options.e2e ? '--e2e' : ''
   ]
   if (options.headless) {
